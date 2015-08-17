@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% set active_page = "games" %}
+
+{% block title %} Games {% endblock %}
+{% block body %}
+    <div class='top-stuff'>
+        <h2 style='display: inline-block'><a class='title-link' href='http://tekbubble.com'> TekBubble </a></h2>
+        <a class='demo-link' href='http://tekbubble.com'>(demo)</a>
+    </div>
+
+    <div class='row' id='TekBubble'>
+        <div class='five columns'>
+            <video width='90%' height='90%' autoplay loop>
+              <source src="../static/videos/tekbubblegame.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>
+                I used a mailto link for suggestions as well as Facebook analytics to connect with our users.
+            </p>
+            <img width='90%' height='90%' src='../static/images/tbmenu.png'>
+        </div>
+        <div class='seven columns'>
+            <p>
+            TekBubble is a side scrolling game where you rise to the stars in a TekBubble. I served as team lead, doing code reviews and merging. I also created a system for automatically adding new obstacles <code>class Alien : Obstacle {</code> and backgrounds into our game. 
+            </p>
+            <img src='../static/images/tbobstacles.png'></img>
+            <br><br>
+            <p>I gave the developers design patterns to follow (Coroutines, Inheritance). 
+            </p>
+            <pre>
+<code id='content'>
+private IEnumerator CreateCloud()
+{
+  while(!gameOver)
+  {
+    //get a random starting position for the cloud
+    Vector3 cloudPos = new Vector3(GetRandomBackgroundPos());
+    
+    //get an inactive cloud from the cloudpool
+    Cloud cloud = cloudPool.GetObj();
+
+    //parallax
+    float scale = Random.Range (.05f, .3f);
+    cloud.transform.localScale = new Vector3(scale,scale,1);
+    cloud.transform.position = cloudPos;
+    
+    cloud.gameObject.SetActive(true);
+    
+    //wait for before making another one
+    float secondsUntilNext =
+      2/Game.speed + Mathf.Max((height-2500) / 6500f, 0);
+
+    yield return new WaitForSeconds(secondsUntilNext);
+  }
+}
+            </code>
+            </pre>
+            I also used a Mesh Particle Renderer to make the bubble pop.
+            </p>
+
+            <video autoplay loop>
+              <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
+              Your browser does not support the html5 video tag.
+            </video>
+
+            <!-- /home/tyrone/tekbubblefall.mp4 -->
+
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>ChessGo</h2>
+    <div class='row' id='ChessGo'>
+        <div class='five columns'>
+            <video width='90%' height='90%' autoplay loop>
+              <source src="../static/videos/tekbubblegame.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <p>
+                I used a mailto link for suggestions as well as Facebook analytics to connect with our users.
+            </p>
+            <img width='90%' height='90%' src='../static/images/tbmenu.png'>
+        </div>
+        <div class='seven columns'>
+            <p>
+            TekBubble is a side scrolling game where you rise to the stars in a TekBubble. I served as team lead, doing code reviews and merging. I also created a system for automatically adding new obstacles <code>class Alien : Obstacle {</code> and backgrounds into our game. 
+            </p>
+            <img src='../static/images/tbobstacles.png'></img>
+            <br><br>
+            <p>I gave the developers design patterns to follow (Coroutines, Inheritance). 
+            </p>
+            <pre>
+<code id='content'>
+private IEnumerator CreateCloud()
+{
+  while(!gameOver)
+  {
+    //get a random starting position for the cloud
+    Vector3 cloudPos = new Vector3(GetRandomBackgroundPos());
+    
+    //get an inactive cloud from the cloudpool
+    Cloud cloud = cloudPool.GetObj();
+
+    //parallax
+    float scale = Random.Range (.05f, .3f);
+    cloud.transform.localScale = new Vector3(scale,scale,1);
+    cloud.transform.position = cloudPos;
+    
+    cloud.gameObject.SetActive(true);
+    
+    //wait for before making another one
+    float secondsUntilNext =
+      2/Game.speed + Mathf.Max((height-2500) / 6500f, 0);
+
+    yield return new WaitForSeconds(secondsUntilNext);
+  }
+}
+            </code>
+            </pre>
+            I also used a Mesh Particle Renderer to make the bubble pop.
+            </p>
+
+            <video autoplay loop>
+              <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
+              Your browser does not support the html5 video tag.
+            </video>
+
+            <!-- /home/tyrone/tekbubblefall.mp4 -->
+
+        </div>
+    </div>
+{% endblock %}

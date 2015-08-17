@@ -1,0 +1,50 @@
+<!doctype html>
+<head>
+  <title>{% block title %}{% endblock %} | Gregory Guterman</title>
+  <link rel=stylesheet type=text/css href="http://fonts.googleapis.com/css?family=Raleway"> 
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/skeleton.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/portfolio.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+
+<body>
+  <div class='container'>
+  <div class=my-big-name top-part>
+    <h1 id="big-name">Gregory Guterman</h1>
+    <p id="job-title">Software Engineer</p>
+  </div>
+  <!-- <hr width="400rem" align="left"> -->
+  <br>
+
+  <nav class='top-part'>
+    <!-- href, id, caption -->
+    {% set navigation_bar = [
+      ('/', 'home', 'Home'),
+      ('/games', 'games', 'Games'),
+      ('/visualizations', 'visualizations', 'Visualizations'),
+      ('/websites', 'websites', 'Websites')
+      ] -%}
+    {% set active_page = active_page|default('home') -%}
+
+    <div class=row>
+      {% for href, id, caption in navigation_bar %}
+      <div class="three columns">
+        <a class="navbar-link {% if id == active_page %} active {% endif %}" 
+           href="{{ href|e }}">{{ caption|e }}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+  </nav>
+
+  <br><br>
+  <!-- <div class=body> -->
+  {% block body %}{% endblock %}
+  <!-- </div> -->
+  </div>
+  <div class=footer>
+    <!-- Gregory Guterman -->
+  </div>
+
+</body>
