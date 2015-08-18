@@ -25,7 +25,7 @@
             </p>
             <img src='../static/images/tbobstacles.png'></img>
             <br><br>
-            <p>I gave the developers design patterns to follow (Coroutines, Inheritance). 
+            <p>I gave the developers design patterns to follow, like Coroutines and Inheritance. 
             </p>
             <pre>
 <code id='content'>
@@ -55,15 +55,16 @@ private IEnumerator CreateCloud()
 }
             </code>
             </pre>
-            I also used a Mesh Particle Renderer to make the bubble pop.
-            </p>
+            I also used a Mesh Particle Renderer to make the bubble pop. </p>
 
             <video autoplay loop>
               <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
               Your browser does not support the html5 video tag.
             </video>
 
-            <!-- /home/tyrone/tekbubblefall.mp4 -->
+            <p>
+            <span style="float:left;color:#B4B4B7;font-size:64px;line-height:35px;padding-top:3px; padding-right:3px;font-family: Times, serif, Georgia;">I</span>f I were to continue developing TekBubble, I would design a game element that gives a strong feeling of progression to the game, like adding Boss levels to separate increasing jumps in difficulty. Right now the difficulty increases continuously, which testers said doesn't give enough reward, especially in the long pre-space stage.
+            </p>
 
         </div>
     </div>
@@ -72,62 +73,238 @@ private IEnumerator CreateCloud()
 
     <h2>ChessGo</h2>
     <div class='row' id='ChessGo'>
-        <div class='five columns'>
-            <video width='90%' height='90%' autoplay loop>
-              <source src="../static/videos/tekbubblegame.mp4" type="video/mp4">
+        <div class='three columns'>
+            <img align='right' width=100% height=100% src='../static/images/late night go.jpg'>
+        </div>
+        <div class='six columns'>
+            <p class='middle-text' style='font-size: 17px' >
+                John Chen and I invented ChessGo one late night playing Go under candlelight. The rules are a combination of Chess and Go: players can either make a standard Chess move or place a Go stone anywhere on the board. When a group of pieces is surrounded, it dies. We immediately got to writing a working prototype for our creation.
+            </p>
+        </div>
+        <div class='three columns middle-right'>
+            <img align='right' width=100% height=100% src='../static/images/go.jpg'>
+        </div>
+    </div>
+    <br>
+    <div class='row' id='ChessGo-Row2'>
+        <div class='twelve columns'>
+            <video width='100%' height='100%' autoplay loop>
+              <source src="../static/videos/chessgo.mp4" type="video/mp4">
               Your browser does not support the video tag.
             </video>
+
             <p>
-                I used a mailto link for suggestions as well as Facebook analytics to connect with our users.
-            </p>
-            <img width='90%' height='90%' src='../static/images/tbmenu.png'>
-        </div>
-        <div class='seven columns'>
-            <p>
-            TekBubble is a side scrolling game where you rise to the stars in a TekBubble. I served as team lead, doing code reviews and merging. I also created a system for automatically adding new obstacles <code>class Alien : Obstacle {</code> and backgrounds into our game. 
-            </p>
-            <img src='../static/images/tbobstacles.png'></img>
-            <br><br>
-            <p>I gave the developers design patterns to follow (Coroutines, Inheritance). 
+                One challenge was deciding whether a connected group of pieces was surrounded or not.
             </p>
             <pre>
 <code id='content'>
-private IEnumerator CreateCloud()
+// Returns in a list all orthogonally adjacent but not out of bound points
+public static HashSet<Point> GetAdjacentPoints(Point p)
 {
-  while(!gameOver)
-  {
-    //get a random starting position for the cloud
-    Vector3 cloudPos = new Vector3(GetRandomBackgroundPos());
-    
-    //get an inactive cloud from the cloudpool
-    Cloud cloud = cloudPool.GetObj();
+    HashSet<Point> neighbors = new HashSet<Point>();
 
-    //parallax
-    float scale = Random.Range (.05f, .3f);
-    cloud.transform.localScale = new Vector3(scale,scale,1);
-    cloud.transform.position = cloudPos;
-    
-    cloud.gameObject.SetActive(true);
-    
-    //wait for before making another one
-    float secondsUntilNext =
-      2/Game.speed + Mathf.Max((height-2500) / 6500f, 0);
+    //Up
+    if (p.row < MAXROW) { neighbors.Add(new Point(p.row + 1, p.col)); }
+    //Down
+    if (p.row > 0) { neighbors.Add(new Point(p.row - 1, p.col)); }
+    //Left
+    if (p.col < MAXCOL) { neighbors.Add(new Point(p.row, p.col + 1)); }
+    //Right
+    if (p.col > 0) { neighbors.Add(new Point(p.row, p.col - 1)); }
 
-    yield return new WaitForSeconds(secondsUntilNext);
-  }
+    return neighbors;
+}
+
+public static HashSet<Point> GetNeighbors(HashSet<Point> group, char[,] board)
+{
+    HashSet<Point> neighbors = new HashSet<Point>();
+
+    foreach (Point p in group)
+    {
+        HashSet<Point> localNeighbors = GetAdjacentPoints(p);
+        foreach (Point n in localNeighbors)
+        {
+            if (!group.Contains(n))
+            {
+                neighbors.Add(n);
+            }
+        }
+    }
+    return neighbors;
+}
+
+//Returns a list of all pieces that are directly connected 
+public static HashSet<Point> GetGroup(Point p, char[,] board)
+{
+    HashSet<Point> group = new HashSet<Point>();
+    group.Add(p);
+    int i = 0;
+    int prevSize = 1;
+    do
+    {
+        prevSize = group.Count;
+        HashSet<Point> neighbors = GetNeighbors(group, board);
+        i++;
+
+        foreach (Point n in neighbors)
+        {
+            if ((IsWhiteAt(p, board) && IsWhiteAt(n, board)) || (IsBlackAt(p, board) && IsBlackAt(n, board)))
+            {
+                group.Add(n);
+            }
+        }
+        //Just in case of infinite loop!
+        if (i == MAXCOL * MAXROW - 1)
+        {
+            Debug.LogError("Something went wrong in GetGroup");
+            break;
+        }
+    } while (prevSize != group.Count && i < MAXCOL * MAXROW);
+
+    return group;
+}
+
+public static HashSet<Point> GetLiberties(Point p, char[,] board)
+{
+    HashSet<Point> group = GetGroup(p, board);
+    HashSet<Point> liberties = GetNeighbors(group, board);
+
+    return liberties;
+}
+
+//Checks to see if group that piece at point p belongs to is totally surrounded - none of its liberties are occupied by an empty space
+public static bool IsGroupDead(Point p, char[,] board)
+{
+    HashSet<Point> liberties = GetLiberties(p, board);
+    foreach (Point l in liberties)
+    {
+        if (IsEmptyAt(l, board)) { return false; }
+    }
+    return true;
+}
+
+public static int CountLiberties(Point p, char[,] board)
+{
+    HashSet<Point> liberties = GetLiberties(p, board);
+    int count = 0;
+    foreach (Point l in liberties)
+    {
+        if (IsEmptyAt(l, board)) { count++; }
+    }
+    return count;
 }
             </code>
             </pre>
-            I also used a Mesh Particle Renderer to make the bubble pop.
             </p>
 
-            <video autoplay loop>
-              <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
-              Your browser does not support the html5 video tag.
-            </video>
+            <p>
+            ChessGo was designed with multiplayer in mind, so I reincarnated some client/server socket code I had written for a card game previously.
+            <pre>
+<code>
+void OnReceiveServerMessage(Message msg)
+{
+    int message = msg.message;
+    string[] parameters = msg.parameters;
 
-            <!-- /home/tyrone/tekbubblefall.mp4 -->
+    switch (message)
+    {
+        case Messages.STARTGAME:
+            {
+                //Deciding whether server picked black or white for us
+                IAmBlack = AsyncServerConnection.FixParam(parameters[0]).Equals("1");
+                
+                //Setting up the camera accordingly
+                if (!IAmBlack)
+                {
+                    curHotspot = 6;
+                    myTurn = false;
+                    myTurnText.enabled = false;
+                    Debug.Log("I am White!");
+                    StartCoroutine(Rotate180(camera.transform));
+                    AsyncServerConnection.Receive();
+                }
+                else
+                {
+                    curHotspot = 0;
+                    StartTurn();
+                }
+                break;
+            }
 
+        //Execute opponent's chess move.
+        case Messages.MOVE:
+            {
+                //escape the parameters
+                string[] fromMove = parameters[0].ToString().Split(',');
+
+                //get board coords
+                Point p1 = new Point(int.Parse(fromMove[0]), int.Parse(fromMove[1]));
+               
+                //the move was a Go placement
+                if (parameters.Length == 1)
+                {
+                    PlaceGoStone(p1);
+                }
+
+                //the move was a chess move
+                else
+                {
+                    string[] toMove = parameters[1].ToString().Split(',');
+                    Point p2 = new Point(int.Parse(toMove[0]), int.Parse(toMove[1]));
+
+                    //checks if move is valid, if so it updates board[][]
+                    if (MovePieceBoard(p1, p2))
+                    {
+                        //move gameobject to p2
+                        Transform piece = pieces[p1.row, p1.col].transform;
+                        MovePieceTable(piece, p1, p2);
+
+                        piece = pieces2D[p1.row, p1.col].transform;
+                        MovePieceTable2D(piece, p1, p2);
+
+                        CheckSurrounded(p2);
+                    }
+                    else
+                    {
+                        Debug.LogError("Server sent us an invalid move");
+                    }
+                }
+                StartTurn();
+                break;
+            }
+        case Messages.CHAT:
+            {
+                //escape the parameters
+                string chat = parameters[0].ToString();
+                ReceiveChat(chat);
+                break;
+            }
+    }
+}
+</code>
+</pre>            
+            </p>
+
+            <p>
+                <span style="float:left;color:#B4B4B7;font-size:64px;line-height:35px;padding-top:3px; padding-right:3px;font-family: Times, serif, Georgia;">L</span>ooking back, even though both views are based on the same model, I could have integrated updating 2D and 3D views more gracefully with more abstraction. With a little more abstraction, I wouldn't always have to tell both views to update individually. The problem came up because the 2D view became a requirement after the 3D view, but could easily be fixed with some refactoring.
+            </p>
+
+            <p>
+                I also used Markov Chain Monte Carlo to make a random name generator:
+            </p>
+
+            <div class='inline-pictures' style='display: inline-block;'>
+                <img class='three-images' width=30% src='../static/images/chessgoName1.JPG'>
+                <img class='three-images' width=30% src='../static/images/chessgoName2.JPG'>
+                <img class='three-images' width=30% src='../static/images/chessgoName3.JPG'>
+            </div>
         </div>
+    </div>
+
+    <hr>
+
+    <h2>MoooooonRocks</h2>
+    <div class='row' id='mooonrocks'>
+        Haven't written this section yet.
     </div>
 {% endblock %}

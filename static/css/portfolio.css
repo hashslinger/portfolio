@@ -6,6 +6,7 @@
 hr {
 	margin-top: 0px;
 	padding-top: 0px;
+    width: 90%;
 }
 
 a.active {
@@ -59,4 +60,8 @@ body {
 
 *,*:focus {
 	box-sizing: border-box;
+}
+
+img.three-images {
+    margin: .6em;
 }
