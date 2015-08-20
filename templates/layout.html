@@ -1,17 +1,25 @@
 <!doctype html>
 <head>
   <title>{% block title %}{% endblock %} | Gregory Guterman</title>
-  <link rel=stylesheet type=text/css href="http://fonts.googleapis.com/css?family=Raleway"> 
+  <link rel=stylesheet type=text/css href="http://fonts.googleapis.com/css?family=Raleway">
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700' rel='stylesheet' type='text/css'> 
+  <link href='http://fonts.googleapis.com/css?family=Ultra' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/skeleton.css') }}">
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/portfolio.css') }}">
 </head>
 
 <body>
+  {% block home_cover %}{% endblock %}
   <div class='container'>
+
+  {% block name_and_title %}
   <div class=my-big-name top-part>
     <h1 id="big-name">Gregory Guterman</h1>
     <p id="job-title">Software Engineer</p>
   </div>
+  {% endblock %}
   <!-- <hr width="400rem" align="left"> -->
   <br>
 
@@ -43,7 +51,7 @@
   <!-- </div> -->
   </div>
   <div class=footer>
-    <!-- Gregory Guterman -->
+    Contact info: <a href='//linkedin.com/in/gregoryguterman'>Linked In</a>
   </div>
 
 </body>
