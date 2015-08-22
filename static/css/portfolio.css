@@ -38,6 +38,11 @@ a.title-link {
 	color: #555;
 }
 
+a.icon-link {
+    text-decoration: none;
+    color: #555;   
+}
+
 div.navigation a {
   width: 60px;
   color: #333333;
@@ -80,4 +85,34 @@ body {
 
 img.three-images {
     margin: .6em;
+}
+
+.wide-row {
+    width: 100%;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 64px;  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+
 }

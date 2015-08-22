@@ -12,7 +12,7 @@
 
 <body>
   {% block home_cover %}{% endblock %}
-  <div class='container'>
+  <div class='container' {% if active_page=='home' %} align='center' style="margin: 0 auto; width: 100%; max-width: 9999px;"{% endif %}>
 
   {% block name_and_title %}
   <div class=my-big-name top-part>
@@ -48,7 +48,6 @@
   <br><br>
   <!-- <div class=body> -->
   {% block body %}{% endblock %}
-  <!-- </div> -->
   </div>
   <div class=footer>
     Contact info: <a href='//linkedin.com/in/gregoryguterman'>Linked In</a>
