@@ -12,24 +12,43 @@
     </div>
 {% endblock %}
 {% block name_and_title %} {% endblock %}
-
+{% block nav_bar %} {% endblock %}
 {% block body %}
-	<div class='row wide-row' >
-		<h2> Software Expertise </h2>
-		<div align='center' class='four columns hoverGrey'>
-			<i class="material-icons"><a class='icon-link' href='/games'>android </a></i>
-			<h3><a class='icon-link' href='/games'> Games </a> </h3>
-			<p>Made 3 games in Unity. One is alpha in the Play Store.</p>
+	<div id='software-expertise'>
+		<h2> I'm Greg and I love making things. </h2>
+		<div class='row'>
+			<div class='four columns hoverGrey'>
+				<a id='android' class='icon-link' href='/games'>
+					<i class="material-icons">android</i>
+					<h3 class='icon-label'> Games </h3>
+				</a>
+			</div>
+			<div class='four columns hoverGrey'>
+				<a id='viz' class='icon-link' href='/visualizations'>
+					<i class="material-icons">remove_red_eye</i>
+					<h3> Visualizations </h3>	
+				</a>
+			</div>
+			<div class='four columns hoverGrey'>
+				<a id='sites' class='icon-link' href='/websites'>
+					<i class="material-icons">web</i>
+					<h3> Websites </h3>
+				</a>
+			</div>
 		</div>
-		<div align='center' class='four columns hoverGrey'>
-			<i class="material-icons">remove_red_eye</i>
-			<h3> Visualizations </h3>
-			<p> </p>
+	</div>
+	<div class='row' id='languages'>
+		<div class='four columns'>
+			<p class='donutLabel'>Java, Python</p>
+			<img class='donut' src='{{ url_for('static', filename='images/excellent donut.png')}}'>
 		</div>
-		<div align='center' class='four columns hoverGrey'>
-			<i class="material-icons">web</i>
-			<h3> Websites </h3>
-			<p> </p>
+		<div class='four columns'>
+			<p class='donutLabel'>C#, C++</p>
+			<img class='donut' src='{{ url_for('static', filename='images/good donut.png')}}'>
 		</div>
-<!-- </div> -->
+		<div class='four columns'>
+			<p class='donutLabel'>HTML, CSS, JS</p>
+			<img class='donut' src='{{ url_for('static', filename='images/good donut.png')}}'>
+		</div>
+	</div>
 {% endblock %}

@@ -3,86 +3,89 @@
 
 {% block title %} Games {% endblock %}
 {% block body %}
-    <div class='top-stuff'>
-        <h2 style='display: inline-block'><a class='title-link' href='http://tekbubble.com'> TekBubble </a></h2>
-        <a class='demo-link' href='http://tekbubble.com'>(demo)</a>
-    </div>
-
-    <div class='row' id='TekBubble'>
-        <div class='five columns'>
-            <video width='90%' height='90%' autoplay loop>
-              <source src="../static/videos/tekbubblegame.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <p>
-                I used a mailto link for suggestions as well as Facebook analytics to connect with our users.
-            </p>
-            <img width='90%' height='90%' src='../static/images/tbmenu.png'>
+    <div id='TekBubble'>
+        <div class='top-stuff'>
+            <h2 style='display: inline-block'><a class='title-link' href='http://tekbubble.com'> TekBubble </a></h2>
+            <a class='demo-link' href='http://tekbubble.com'>(demo)</a>
         </div>
-        <div class='seven columns'>
-            <p>
-            TekBubble is a side scrolling game where you rise to the stars in a TekBubble. I served as team lead, doing code reviews and merging. I also created a system for automatically adding new obstacles <code>class Alien : Obstacle {</code> and backgrounds into our game. 
-            </p>
-            <img src='../static/images/tbobstacles.png'></img>
-            <br><br>
-            <p>I gave the developers design patterns to follow, like Coroutines and Inheritance. 
-            </p>
-            <pre>
-<code id='content'>
-private IEnumerator CreateCloud()
-{
-  while(!gameOver)
-  {
-    //get a random starting position for the cloud
-    Vector3 cloudPos = new Vector3(GetRandomBackgroundPos());
-    
-    //get an inactive cloud from the cloudpool
-    Cloud cloud = cloudPool.GetObj();
 
-    //parallax
-    float scale = Random.Range (.05f, .3f);
-    cloud.transform.localScale = new Vector3(scale,scale,1);
-    cloud.transform.position = cloudPos;
-    
-    cloud.gameObject.SetActive(true);
-    
-    //wait for before making another one
-    float secondsUntilNext =
-      2/Game.speed + Mathf.Max((height-2500) / 6500f, 0);
+        <div class='row'>
+            <div class='five columns'>
+                <video width='90%' height='90%' autoplay loop>
+                  <source src="../static/videos/tekbubblegame.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p>
+                    I used a mailto link for suggestions as well as Facebook analytics to connect with our users.
+                </p>
+                <img width='90%' height='90%' src='../static/images/tbmenu.png'>
+            </div>
+            <div class='seven columns'>
+                <p>
+                TekBubble is a side scrolling game where you rise to the stars in a TekBubble. I served as team lead, doing code reviews and merging. I also created a system for automatically adding new obstacles <code>class Alien : Obstacle {</code> and backgrounds into our game. 
+                </p>
+                <img src='../static/images/tbobstacles.png'></img>
+                <br><br>
+                <p>I gave the developers design patterns to follow, like Coroutines and Inheritance. 
+                </p>
+                <pre>
+    <code id='content'>
+    private IEnumerator CreateCloud()
+    {
+      while(!gameOver)
+      {
+        //get a random starting position for the cloud
+        Vector3 cloudPos = new Vector3(GetRandomBackgroundPos());
+        
+        //get an inactive cloud from the cloudpool
+        Cloud cloud = cloudPool.GetObj();
 
-    yield return new WaitForSeconds(secondsUntilNext);
-  }
-}
-            </code>
-            </pre>
-            I also used a Mesh Particle Renderer to make the bubble pop. </p>
+        //parallax
+        float scale = Random.Range (.05f, .3f);
+        cloud.transform.localScale = new Vector3(scale,scale,1);
+        cloud.transform.position = cloudPos;
+        
+        cloud.gameObject.SetActive(true);
+        
+        //wait for before making another one
+        float secondsUntilNext =
+          2/Game.speed + Mathf.Max((height-2500) / 6500f, 0);
 
-            <video autoplay loop>
-              <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
-              Your browser does not support the html5 video tag.
-            </video>
+        yield return new WaitForSeconds(secondsUntilNext);
+      }
+    }
+                </code>
+                </pre>
+                I also used a Mesh Particle Renderer to make the bubble pop. </p>
 
-            <p>
-            <span style="float:left;color:#B4B4B7;font-size:64px;line-height:35px;padding-top:3px; padding-right:3px;font-family: Times, serif, Georgia;">I</span>f I were to continue developing TekBubble, I would design a game element that gives a strong feeling of progression to the game, like adding Boss levels to separate increasing jumps in difficulty. Right now the difficulty increases continuously, which testers said doesn't give enough reward, especially in the long pre-space stage.
-            </p>
+                <video autoplay loop>
+                  <source src="../static/videos/tekbubblefall.mp4" type="video/mp4">
+                  Your browser does not support the html5 video tag.
+                </video>
 
+                <p>
+                <span style="float:left;color:#B4B4B7;font-size:64px;line-height:35px;padding-top:3px; padding-right:3px;font-family: Times, serif, Georgia;">I</span>f I were to continue developing TekBubble, I would design a game element that gives a strong feeling of progression to the game, like adding Boss levels to separate increasing jumps in difficulty. Right now the difficulty increases continuously, which testers said doesn't give enough reward, especially in the long pre-space stage.
+                </p>
+
+            </div>
         </div>
     </div>
-
     <hr>
 
-    <h2>ChessGo</h2>
-    <div class='row' id='ChessGo'>
-        <div class='three columns'>
-            <img align='right' width=100% height=100% src='../static/images/late night go.jpg'>
-        </div>
-        <div class='six columns'>
-            <p class='middle-text' style='font-size: 17px' >
-                John Chen and I invented ChessGo one late night playing Go under candlelight. The rules are a combination of Chess and Go: players can either make a standard Chess move or place a Go stone anywhere on the board. When a group of pieces is surrounded, it dies. We immediately got to writing a working prototype for our creation.
-            </p>
-        </div>
-        <div class='three columns middle-right'>
-            <img align='right' width=100% height=100% src='../static/images/go.jpg'>
+    <div id='ChessGo'>
+        <h2>ChessGo</h2>
+        <div class='row'>
+            <div class='three columns'>
+                <img align='right' width=100% height=100% src='../static/images/late night go.jpg'>
+            </div>
+            <div class='six columns'>
+                <p class='middle-text' style='font-size: 17px' >
+                    John Chen and I invented ChessGo one late night playing Go under candlelight. The rules are a combination of Chess and Go: players can either make a standard Chess move or place a Go stone anywhere on the board. <em>When a group of pieces is surrounded, it dies.</em> We immediately went to writing a working prototype for our invention.
+                </p>
+            </div>
+            <div class='three columns middle-right'>
+                <img align='right' width=100% height=100% src='../static/images/go.jpg'>
+            </div>
         </div>
     </div>
     <br>
@@ -306,8 +309,10 @@ void OnReceiveServerMessage(Message msg)
 
     <hr>
 
-    <h2>MoooooonRocks</h2>
-    <div class='row' id='mooonrocks'>
-        Haven't written this section yet.
+    <div id='mooonrocks'>
+        <h2>MoooooonRocks</h2>
+        <div class='row'>
+            Haven't written this section yet.
+        </div>
     </div>
 {% endblock %}

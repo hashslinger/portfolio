@@ -5,7 +5,7 @@ div.cover {
     margin: 0;
     /*padding: 85px 0.9375em 500px;*/
     width: 100%;
-    height: 100%;
+    height: 50%;
 
 }
 
@@ -15,11 +15,14 @@ div.cover-text {
 
     width: 100%;
     height: 100%;
+
+    font-size: 20px;
 }
 div.cover-text > h1 {
     color: #4682B4;
     font-weight: bold;
-    font-size: 128px;
+    font-size: 80px;
+    text-shadow: 1px 1px #000000;
 }
 
 #big-name {
@@ -45,6 +48,8 @@ a.title-link {
 a.icon-link {
     text-decoration: none;
     color: #555;   
+
+
 }
 
 div.navigation a {
@@ -99,7 +104,7 @@ img.three-images {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 64px;  /* Preferred icon size */
+  font-size: 80px;  /* Preferred icon size */
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -121,18 +126,32 @@ img.three-images {
 
 }
 
+#android {
+  color: #78C257;
+}
+
+#viz {
+  /*color: #4682B4;*/
+  color: #FFB958;
+
+}
+
+#sites {
+  color: #78C257;
+
+  /*color: #FFB958;*/
+}
+
 .separator
 {
   background: #272727;
-
   height: 2px;
-
   margin: 20px 0px;
 }
 
 .circleIcon
 {
-  border: 2px solid white;
+  /*border: 2px solid white;*/
 
   border-radius: 32px;
 
@@ -140,6 +159,9 @@ img.three-images {
 
   padding: 20px 23px;
   margin-right: 20px;
+  margin-bottom: 20px;
+
+  background: #333;
 }
 
 .circleIcon:hover
@@ -165,11 +187,38 @@ img.three-images {
   bottom: 0px;
   left: 0px;
 
-  background: #171717;
+  /*background: #aaaaaa;*/
 
   width: 100%;
-  height: 125px;
+  height: 55px;
 
-  padding: 50px;
+  padding-top: 25px;
+  padding-bottom: 45px;
   padding-left: 30px;
+}
+
+#software-expertise {
+  background: #efefef;
+  padding: 50px 0px;
+}
+
+#languages {
+  margin: 100px;
+}
+
+#form-bg {
+  background: #efefef;
+}
+.form {
+  padding-top: 50px;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.donut {
+  /*align;*/
+}
+
+.donutLabel {
+  font-size: 24px;
 }
