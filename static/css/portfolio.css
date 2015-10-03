@@ -19,10 +19,14 @@ div.cover-text {
     font-size: 20px;
 }
 div.cover-text > h1 {
+    /*color: #77C257;*/
+    /*color: #42937F;*/
+    /*color: #FFB958;*/
     color: #4682B4;
     font-weight: bold;
     font-size: 80px;
-    text-shadow: 1px 1px #000000;
+    font-family: 'Montserrat';
+    /*text-shadow: 1px 1px #000000;*/
 }
 
 #big-name {
@@ -126,19 +130,23 @@ img.three-images {
 
 }
 
-#android {
-  color: #78C257;
+#gamepad {
+  /*color: #78C257;*/
+  color: #E29465;
 }
 
 #viz {
   /*color: #4682B4;*/
-  color: #FFB958;
+  /*color: #78C257;*/
 
+  /*color: #FFB958;*/
+
+  color: #E29465;
 }
 
 #sites {
-  color: #78C257;
-
+  /*color: #78C257;*/
+color: #E29465;
   /*color: #FFB958;*/
 }
 
@@ -162,6 +170,8 @@ img.three-images {
   margin-bottom: 20px;
 
   background: #333;
+
+  pointer-events: all;
 }
 
 .circleIcon:hover
@@ -195,6 +205,8 @@ img.three-images {
   padding-top: 25px;
   padding-bottom: 45px;
   padding-left: 30px;
+
+  pointer-events: none;
 }
 
 #software-expertise {
@@ -209,6 +221,7 @@ img.three-images {
 #form-bg {
   background: #efefef;
 }
+
 .form {
   padding-top: 50px;
   margin: 0 auto;

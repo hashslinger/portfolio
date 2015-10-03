@@ -3,12 +3,24 @@
 <html style='height: 100%'>
   <head>
     <title>{% block title %}{% endblock %} | Gregory Guterman</title>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <link rel=stylesheet type=text/css href="http://fonts.googleapis.com/css?family=Raleway">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/skeleton.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/portfolio.css') }}">
     <link rel='stylesheet' href="{{ url_for('static', filename='fontawesome/css/font-awesome.min.css') }}">
+    <!-- <link href='https://fonts.googleapis.com/css?family=Alegreya' rel='stylesheet' type='text/css'> -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
   </head>
 
   <body style='height: 100%'>
@@ -57,21 +69,30 @@
 
     {% block contact %}
     <div id='form-bg'>
-      <form class='form'>
+      <form class='form' action='/email'>
         <h3>Contact Me</h3>
         <div class="row">
           <div class="six columns">
-            <label for="nameInput">Name</label>
-            <input class="u-full-width" type="email" placeholder="Steve" id="nameInput">
+            {{ form.name.label }}
+            {{ form.name (class_='u-full-width')}}
+            <!-- <label for="nameInput">Name</label>
+            <input class="u-full-width" type="email" placeholder="Steve" id="nameInput"> -->
           </div>
           <div class="six columns">
-            <label for="emailInput">Email</label>
-            <input class="u-full-width" type="email" placeholder="steve@company.com" id="emailInput">
+            {{ form.email.label }}
+            {{ form.email (class_='u-full-width') }}
+            <!-- <label for="emailInput">Email</label>
+            <input class="u-full-width" type="email" placeholder="steve@company.com" id="emailInput"> -->
           </div>
         </div>
-        <label for="Message">Message</label>
-        <textarea class="u-full-width" placeholder="Hi Greg, you have an impressive resume. Would you like to work at our company?" id="Message"></textarea>
-        <input class="button-primary" type="submit" value="Submit">
+        <!-- <label for="Message">Message</label>
+        <textarea class="u-full-width" placeholder="Hi Greg, you have an impressive resume. Would you like to work at our company?" id='messageInput'></textarea> -->
+        {{ form.message.label }}
+        {{ form.message(class_='u-full-width') }}
+        
+        <!-- <input class="button-primary" type="submit" value="Submit"> -->
+        <br>
+        {{ form.submit (class_='button-primary') }}
       </form>
     </div>
     {% endblock %}
