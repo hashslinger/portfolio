@@ -3,19 +3,20 @@
 
 {% block title %} Home {% endblock %}
 
-{% block home_cover %}
-	<div class="cover">
-	    <div class='cover-text'>
-	        <h1>Gregory Guterman</h1>
-	        <p>2015 B.S., Computer Science, UC Davis</p>
-	    </div>
-    </div>
-{% endblock %}
-{% block name_and_title %} {% endblock %}
-{% block nav_bar %} {% endblock %}
 {% block body %}
-	<div id='software-expertise'>
+	<div id='projects' align='center'>
 		<h2> I'm Greg and I love making things. </h2>
-		
+		{% for project_row in projects | batch(3) %}
+		<div class='row'>	
+			{% for project,category,image in project_row %}
+			<div class='four columns hoverGrey u-max-full-width' id='{{ project }}'>
+				<div class='project' style="background-image: url({{ image }})">
+				<a href='{{ category + '#' + project }}'><span class='link-spanner'></span></a>	
+				</div>
+				<a href='{{ category + '#' + project }}' class='title-link'> {{ project }} </a>	
+			</div>
+			{% endfor %}
+		</div>
+		{% endfor %}
 	</div>
 {% endblock %}

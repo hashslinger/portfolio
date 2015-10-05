@@ -3,31 +3,18 @@
     Gregory Guterman Portfolio
 """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 app = Flask(__name__)
 
-from wtforms import Form, TextField, TextAreaField, SubmitField, validators
-
-app.secret_key = '3ruqh4r0r8j230rj0w9f0kq90i23092'
-
-class ContactForm(Form):
-    name = TextField('Name', [validators.Length(min=1, max=35)])
-    email = TextField('Email', [validators.Length(min=6, max=35)])
-    message = TextAreaField('Message', [validators.DataRequired('Please enter a message')])
-    submit = SubmitField("Submit")
-
-@app.route('/email', methods=['GET', 'POST'])
-def email():
-    form = ContactForm(request.form)
-    if request.method == 'POST' and form.validate():
-        flash('Thanks for your email')
-    form = ContactForm()
-    return render_template('home.html', form=form)
-
-@app.route('/', methods=['GET'])
+@app.route('/')
 def home():
-    form = ContactForm()
-    return render_template('home.html', form=form)
+    return render_template('home.html', projects= [
+        ('TekBubble', '/games', 'static/images/tbvonwoz.png'),
+        ('Synteny Explorer', '/visualizations', 'static/images/genome.png'),
+        ('ChessGo', '/games', 'static/images/chessgoSS.png'),
+        ('All of the Video Games', '/visualizations', 'static/images/allgames.png'),
+        ('Davis Dinner Club', '/websites', 'static/images/ddc.png')
+    ])
 
 @app.route('/games')
 def games():
@@ -40,6 +27,10 @@ def visualizations():
 @app.route('/websites')
 def websites():
     return render_template('websites.html')
+
+@app.route('/ddc')
+def ddc():
+    return render_template('ddc.html')
 
 if __name__ == '__main__':
     app.run(debug='true')
