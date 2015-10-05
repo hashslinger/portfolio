@@ -160,3 +160,13 @@ img.three-images {
 .inline-title {
   display: inline-block
 }
+
+span.drop-cap {
+  float:left;
+  color:#B4B4B7;
+  font-size:64px;
+  line-height:35px;
+  padding-top:3px; 
+  padding-right:3px;
+  font-family: Times, serif, Georgia;
+}
