@@ -33,7 +33,7 @@ void draw()
   colbtheta += random(0, .003);
   //cola += random(0,5);
 
-  int index = getIndexViaMouse();
+  int index = aValues.length - 1 - getIndexViaMouse();
   a = aValues[index];
   b = bValues[index];
 
@@ -79,7 +79,7 @@ void draw()
 PVector[] getLissajous(float A, float B, float a, float b, float d, float step)
 {
   int n = 209;
-  step = PI / n * 8;
+  step = PI / n * 10;
   float t = 0;
 
   PVector[] points = new PVector[n];
