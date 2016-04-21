@@ -161,6 +161,10 @@ img.three-images {
   display: inline-block
 }
 
+.float-left {
+  float: left;
+}
+
 span.drop-cap {
   float:left;
   color:#B4B4B7;

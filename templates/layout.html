@@ -11,45 +11,49 @@
 
   <body style='height: 100%'>
     <div class='container' {% if active_page=='home' %} style="width:90%; max-width: 1200px;"{% endif %}>
-
-    {% block name_and_title %}
-    <div class=my-big-name top-part>
-      <h1 id="big-name">Gregory Guterman</h1>
-      <p id="job-title">Software Engineer</p>
-    </div>
-    {% endblock %}
-    <!-- <hr width="400rem" align="left"> -->
-    <br>
-
-    {% block nav_bar %}
-    <nav class='top-part'>
-      <!-- href, id, caption -->
-      {% set navigation_bar = [
-        ('/', 'home', 'Home'),
-        ('/games', 'games', 'Games'),
-        ('/visualizations', 'visualizations', 'Visualizations'),
-        ('/websites', 'websites', 'Websites')
-        ] -%}
-      {% set active_page = active_page|default('home') -%}
-
-      <div class=row>
-        {% for href, id, caption in navigation_bar %}
-        <div class="three columns">
-          <a class="navbar-link {% if id == active_page %} active {% endif %}" 
-             href="{{ href|e }}">{{ caption|e }}
-          </a>
-        </div>
-        {% endfor %}
+      <div class=float-left>
+        <script src="../static/scripts/processing.min.js"></script>
+        <canvas data-processing-sources="../static/scripts/lissajous1.pde"></canvas>
       </div>
+        {% block name_and_title %}
+          <div class=my-big-name top-part>
+            <h1 id="big-name">Gregory Guterman</h1>
+            <p id="job-title">Software Engineer</p>
+          </div>
+        {% endblock %}
+        <!-- <hr width="400rem" align="left"> -->
+        <br>
 
-    </nav>
+        {% block nav_bar %}
+        <nav class='top-part'>
+          <!-- href, id, caption -->
+          {% set navigation_bar = [
+            ('/', 'home', 'Home'),
+            ('/games', 'games', 'Games'),
+            ('/visualizations', 'visualizations', 'Visualizations'),
+            ('/websites', 'websites', 'Websites')
+            ] -%}
+          {% set active_page = active_page|default('home') -%}
 
-    <br><br>
-    {% endblock %}
-    <!-- <div class=body> -->
-    {% block body %}{% endblock %}
+          <div class=row>
+            {% for href, id, caption in navigation_bar %}
+            <div class="three columns">
+              <a class="navbar-link {% if id == active_page %} active {% endif %}" 
+                 href="{{ href|e }}">{{ caption|e }}
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+
+        </nav>
+
+      <br><br>
+      {% endblock %}
+
+      <!-- <div class=body> -->
+      {% block body %}{% endblock %}
+
     </div>
-
     <div align='right' class='footer'> 
         <a href='//linkedin.com/in/gregoryguterman' class='circleIcon'><span class='fa fa-linkedin'></span></a>
         <a href='resume' class='circleIcon'>Résumé</a>
