@@ -1,0 +1,302 @@
+<DOCTYPE html>
+<meta charset="utf-8">
+<title>All of the Video Games</title>
+<style>
+
+text {
+  font: 90px sans-serif;
+}
+
+.game > text {
+  font: 2px sans-serif;
+}
+.tick > text {
+  font: 2px sans-serif;
+}
+.node:hover > circle{
+  fill: orange;
+}
+.game:hover > rect{
+  fill: orange;
+}
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.container {
+  margin: auto;
+  width: 1100px;
+}
+
+.svg-container {
+  float: left;
+}
+
+.controls-wrapper {
+  float: right;
+}
+
+</style>
+<body>
+
+<div class="container">
+  <div class="svg-container">
+  </div>
+
+<!--   <div class="controls-wrapper">
+    control
+  </div> -->
+
+  <div id="info">
+    <h3> All of the video games </h3>
+    <p> 
+      <b>Click</b> on a video game company to see it's games. <b>Mouse over</b> to see full names. <b>Pan and zoom</b> for a closer look.
+    </p>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var width = window.innerWidth*.8,
+    height = window.innerHeight*.8,
+    format = d3.format(",d"),
+    
+    color = d3.scale.category20c();
+    // consoleColors = d3.scale.category20c();
+
+    active = d3.select(null);
+
+var zoom = d3.behavior.zoom()
+    .translate([108,-28])
+    .scale(.07)
+    .scaleExtent([.05, 8])
+    .on("zoom", zoomed);
+
+// zoomed();
+// g.attr("transform", "translate(" + diameter/2 + "," + diameter/2 + ")scale(" + "8" + ")");
+
+var bubble = d3.layout.pack()
+    .sort(null)
+    .size([width*15, height*15])
+    .padding(1.5);
+
+var svg = d3.select(".svg-container").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("class", "bubble")
+    .on("click", stopped, true);
+
+var g = svg.append("g");
+
+svg
+  .call(zoom) // delete this line to disable free zooming
+  .call(zoom.event);
+
+var data;
+
+function load(min) {
+  d3.json("../static/allofthegamesjson.json", function(error, root) {
+    if (error) throw error;
+
+    data = root;
+
+    var node = g.selectAll(".node")
+        .data(bubble.nodes(classes(root, min))
+        .filter(function(d) { return !d.children; }))
+        .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        .on("click", clicked);
+
+    node.append("title")
+        .text(function(d) { return d.className + ": " + format(d.value); });
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; })
+        .style("fill", function(d) { return color(d.makerName); });
+
+    node.append("text")
+        .attr("dy", ".35em")
+        .style("text-anchor", "middle")
+        // .text(function(d) { return d.className.substring(0, d.r / 30); });
+        .text(function(d) { return d.className; })
+        .style("font-size", function(d) { return Math.min(3.8 * d.r, (3.8 * d.r - 8) / this.getComputedTextLength() * 36) + "px"; });
+
+  });
+}
+load(10);
+
+//Zooming ----------------------------------
+function clicked(d) {
+  if (active.node() === this) return reset();
+
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+
+  var dur = 500;
+  active.selectAll("circle,text")
+        .transition()
+        .duration(dur)
+        .style('fill-opacity', .2);
+
+  var dx = d.r*2,
+      dy = d.r*2,
+      x = d.x,
+      y = d.y,
+      scale = 1.3 / Math.max(dx / width, dy / height),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+      //translate = [diameter / 2 - scale * x, diameter / 2 - scale * y];
+
+  console.log(scale);
+
+  svg.transition()
+      .duration(800)
+      .call(zoom.translate(translate).scale(scale).event);
+
+  //show games:
+  var gameData = data[active.text().split(":")[0]];
+
+  games(gameData, d);
+}
+
+function games(data, node) {
+  var start_year = data['minyear'],
+      end_year = data['maxyear'];
+
+  // var xScale = d3.scale.ordinal()
+  //   .domain(data.map((d) -> d.letter))
+  //   .range([-node.r*.8, node.r*.8]);
+  var xScale = d3.scale.linear()
+    .domain([start_year, end_year])
+    .range([-node.r*.8, node.r*.8]);
+
+  // var x = d3.scale.linear()
+  var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .outerTickSize(0)
+    .innerTickSize(6)
+    .ticks(end_year-start_year)
+    .orient("top");
+  var formatYears = d3.format("0000");
+    xAxis.tickFormat(formatYears);
+
+  active.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + -node.r*.40 + ")")
+    .call(xAxis);
+
+  // delete data['count'];
+  // delete data['maxyear'];
+  // delete data['minyear'];
+
+  var squareSize = node.r/(end_year - start_year);
+
+  for (var game in data) {
+    if(game in ['count', 'maxyear', 'minear']) {
+      continue;
+    }
+
+    //see if we already have the group for this year
+    var year = active.select("#y" + data[game]['year']);
+
+    //if not, make one
+    if(year.empty())
+    {
+      year = active.append("g")
+        .attr("id", "y" + data[game]['year']);
+    }
+
+    var g = year.append("g").attr("class", "game");
+    g.append("title")
+      .text(game);
+
+    var rects = g.selectAll("rect")
+      .data([data[game]])
+      .enter()
+      .append("rect");
+
+    var texts = g.selectAll("text")
+      .data([data[game]])
+      .enter()
+
+    rects
+      .attr("x", function(d) { 
+        if(isNaN(xScale(d.year)))
+          console.log(d);
+        return xScale(d.year)-squareSize/2; 
+      })
+      .attr("y", year.selectAll(".game").size()*squareSize - node.r*.45)
+      .attr("width", squareSize)
+      .attr("height", squareSize)
+      .style("fill", function(d) { return color(d['platform']); });
+
+    texts.append("text")
+      .attr("y", year.selectAll(".game").size()*squareSize + squareSize/2 - node.r*.45)
+      .attr("x",function(d) { return xScale(d.year)})
+      .attr("class","value")
+      .style("text-anchor", "middle")
+      .text(game.substring(0,squareSize))
+
+    texts.append("text")
+      .attr("y", year.selectAll(".game").size()*squareSize + squareSize/2 - node.r*.45 + 2)
+      .attr("x",function(d) { return xScale(d.year)})
+      .attr("class","value")
+      .style("text-anchor", "middle")
+      .text(data[game].platform.substring(0,squareSize))
+
+      // .style("fill", function(d) { return c(j); })
+      // .style("display","none");
+  };
+}
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  var dur = 800;
+  active.select("circle")
+        .transition()
+        .duration(dur)
+        .style('fill-opacity', 1);
+
+  svg.transition()
+      .duration(dur)
+      .call(zoom.translate([0, 0]).scale(.07).event);
+}
+
+function zoomed() {
+  g.style("stroke-width", 1.5 / d3.event.scale + "px");
+  g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+//--------------------------------------------
+
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+// for our game data
+function classes(root, min) {
+  var classes = [];
+
+  var i = 0;
+  for (var key in root) {
+    if (root.hasOwnProperty(key)) {
+      var child = root[key];
+      if(child['count'] > min)
+        classes.push({makerName: key, className: key, value: child['count']});
+      i++;
+    }
+  }
+  return {children: classes};
+}
+
+d3.select(self.frameElement).style("height", window.innerHeight*.8 + "px");
+
+</script>
