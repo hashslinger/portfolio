@@ -8,11 +8,21 @@
 		<h2> I'm Greg and I love making things. </h2>
 		{% for project_row in projects | batch(3) %}
 		<div class='row'>	
-			{% for project,category,image in project_row %}
+			{% for project,category,image,video in project_row %}
 			<div class='four columns hoverGrey u-max-full-width' id='{{ project }}'>
+				{% if video == True %}
+				<a href='{{ category + '#' + project }}'>
+					<video width='100%' height='100%' autoplay loop>
+		              <source src="{{ image }}" type="video/mp4">
+		              Your browser does not support the video tag.
+		            </video>
+		        </a>
+				{% else %}
 				<div class='project' style="background-image: url({{ image }})">
-				<a href='{{ category + '#' + project }}'><span class='link-spanner'></span></a>	
+					<a href='{{ category + '#' + project }}'><span class='link-spanner'></span></a>	
 				</div>
+				{% endif %}
+
 				<a href='{{ category + '#' + project }}' class='title-link'> {{ project }} </a>	
 			</div>
 			{% endfor %}

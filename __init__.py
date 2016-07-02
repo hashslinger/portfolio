@@ -9,11 +9,15 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('home.html', projects= [
-        ('TekBubble', '/games', 'static/images/tbvonwoz.png'),
-        ('Synteny Explorer', '/visualizations', 'static/images/genome.png'),
-        ('ChessGo', '/games', 'static/images/chessgoSS.png'),
-        ('All of the Video Games', '/visualizations', 'static/images/allgames.png'),
-        ('Davis Dinner Club', '/websites', 'static/images/ddc.png')
+        ('Plankton Populations', '/visualizations', '''http://www.exploratorium.edu/sites/default/files/East_LivingLiquids.jpg''', False),
+        ('TekBubble', '/games', 'static/images/tbvonwoz.png', False),
+        ('Synteny Explorer', '/visualizations', 'static/images/genome.png', False),
+        ('JS Static Analyzer', '/websites', 'static/images/js-static-analyzer.png', False),
+        ('Tower Defense', '/games', 'static/videos/tower-defense.mp4', True),
+        ('ChessGo', '/games', 'static/images/chessgoSS.png', False),
+        ('All of the Video Games', '/visualizations', 'static/images/allgames.png', False),
+        ('MoooooonRocks', '/games', 'static/videos/mooon-rocks.mp4', True),
+        ('Davis Dinner Club', '/websites', 'static/images/ddc.png', False)
     ])
 
 @app.route('/games')

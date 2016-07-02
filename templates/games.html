@@ -3,7 +3,24 @@
 
 {% block title %} Games {% endblock %}
 {% block body %}
-    <div id='TekBubble'>
+    <div class="project-container" id='Tower Defense'>
+        <div class='top-stuff'>
+            <h2 class='inline-title'>Tower Defense</h2>
+        </div>
+
+        <div class='row'>
+            <div class='twelve columns'>
+                <video width='100%' autoplay loop>
+                  <source src="../static/videos/tower-defense.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+            </div>
+            <p>Just a tower defense prototype I'm making myself. Going to be released on Android and iOS.</p>
+        </div>
+    </div>
+
+
+    <div class="project-container" id='TekBubble'>
         <div class='top-stuff'>
             <h2 class='inline-title'><a class='title-link' href='http://tekbubble.com'> TekBubble </a></h2>
             <a class='demo-link' href='http://tekbubble.com'>(demo)</a>
@@ -72,7 +89,7 @@
     </div>
     <hr>
 
-    <div id='ChessGo'>
+    <div class="project-container" id='ChessGo'>
         <h2>ChessGo</h2>
         <div class='row'>
             <div class='three columns'>
@@ -309,9 +326,13 @@ void OnReceiveServerMessage(Message msg)
 
     <hr>
 
-    <div id='mooonrocks'>
+    <div class="project-container" id='MoooooonRocks'>
         <h2>MoooooonRocks</h2>
         <div class='row'>
+            <video width='100%' height='100%' autoplay loop>
+              <source src="../static/videos/mooon-rocks.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
             Haven't written this section yet.
         </div>
     </div>

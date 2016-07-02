@@ -174,3 +174,7 @@ span.drop-cap {
   padding-right:3px;
   font-family: Times, serif, Georgia;
 }
+
+.project-container {
+  margin-bottom: 20px;
+}
