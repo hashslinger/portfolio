@@ -17,7 +17,8 @@ def home():
         ('ChessGo', '/games', 'static/images/chessgoSS.png', False),
         ('All of the Video Games', '/visualizations', 'static/images/allgames.png', False),
         ('MoooooonRocks', '/games', 'static/videos/mooon-rocks.mp4', True),
-        ('Davis Dinner Club', '/websites', 'static/images/ddc.png', False)
+        ('Davis Dinner Club', '/websites', 'static/images/ddc.png', False),
+        ('Radio Playlists', '/websites', 'static/images/radioplaylists.png', False)
     ])
 
 @app.route('/games')
