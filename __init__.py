@@ -46,4 +46,4 @@ def presidential_debate_simulator():
     return render_template('debatevis.html')
 
 if __name__ == '__main__':
-    app.run(debug='true')
+    app.run(debug='false', port=5000)
