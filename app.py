@@ -4,11 +4,13 @@
 """
 
 from flask import Flask, render_template
+
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return render_template('home.html', projects= [
+        ('CodeStory', '/websites', '''static/images/codestory.png''', False),
         ('Plankton Populations', '/visualizations', '''http://www.exploratorium.edu/sites/default/files/East_LivingLiquids.jpg''', False),
         ('TekBubble', '/games', 'static/images/tbvonwoz.png', False),
         ('Synteny Explorer', '/visualizations', 'static/images/genome.png', False),

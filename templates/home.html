@@ -5,7 +5,7 @@
 
 {% block body %}
 	<div id='projects' align='center'>
-		<h2> I'm Greg and I love making things. </h2>
+		<h2> I'm Greg and I make software. </h2>
 		{% for project_row in projects | batch(3) %}
 		<div class='row'>	
 			{% for project,category,image,video in project_row %}
