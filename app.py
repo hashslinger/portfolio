@@ -12,6 +12,7 @@ def home():
     return render_template('home.html', projects= [
         ('CodeStory', '/websites', '''static/images/codestory.png''', False),
         ('Plankton Populations', '/visualizations', '''http://www.exploratorium.edu/sites/default/files/East_LivingLiquids.jpg''', False),
+        ('3d Gif Maker', '/websites', '''static/videos/3dgifmaker.mp4''', True),
         ('TekBubble', '/games', 'static/images/tbvonwoz.png', False),
         ('Synteny Explorer', '/visualizations', 'static/images/genome.png', False),
         ('JS Static Analyzer', '/websites', 'static/images/js-static-analyzer.png', False),
