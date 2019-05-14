@@ -49,4 +49,4 @@ def presidential_debate_simulator():
     return render_template('debatevis.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug='false', port=80)
+    app.run(host='0.0.0.0', debug='false', port=3001)
