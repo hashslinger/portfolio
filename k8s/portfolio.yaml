@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: portfolio
-        image: gcr.io/portfolio-239904/github.com/hashcacher/portfolio:2d617bdf42f9801e96bd92354e87ae48919d008d
+        image: gcr.io/portfolio-239904/github.com/hashcacher/portfolio:97bae09c4c8ac13f360a377078c53c6c2418d565
         ports:
-        - containerPort: 80
+        - containerPort: 3001
 
 ---
 
@@ -31,5 +31,5 @@ spec:
     app: portfolio
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 80
+    port: 3001
+    targetPort: 3001
