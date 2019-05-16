@@ -7,6 +7,7 @@ steps:
   id: Set image tag in k8s Deployment
   args:
   - 'sed'
+  - '-i'
   - "s#image: gcr.*#image: gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA#"
   - 'k8s/portfolio.yaml'
   env:
