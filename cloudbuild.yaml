@@ -3,7 +3,7 @@ steps:
   id: Set image tag in deployment
   args:
   - 'sed'
-  - '"s#image: gcr.*#image: gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA#"'
+  - "s#image: gcr.*#image: gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA#"
   - 'k8s/portfolio.yaml'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-west2-a'
