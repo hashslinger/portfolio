@@ -13,6 +13,7 @@ def home():
         ('CodeStory', '/websites', '''static/images/codestory.png''', False),
         ('Plankton Populations', '/visualizations', '''http://www.exploratorium.edu/sites/default/files/East_LivingLiquids.jpg''', False),
         ('3d Gif Maker', '/websites', '''static/videos/3dgifmaker.mp4''', True),
+        ('Radio Playlists', '/websites', 'static/images/radioplaylists.png', False),
         ('TekBubble', '/games', 'static/images/tbvonwoz.png', False),
         ('Synteny Explorer', '/visualizations', 'static/images/genome.png', False),
         ('JS Static Analyzer', '/websites', 'static/images/js-static-analyzer.png', False),
@@ -20,8 +21,7 @@ def home():
         ('ChessGo', '/games', 'static/images/chessgoSS.png', False),
         ('All of the Video Games', '/visualizations', 'static/images/allgames.png', False),
         ('MoooooonRocks', '/games', 'static/videos/mooon-rocks.mp4', True),
-        ('Davis Dinner Club', '/websites', 'static/images/ddc.png', False),
-        ('Radio Playlists', '/websites', 'static/images/radioplaylists.png', False)
+        ('Davis Dinner Club', '/websites', 'static/images/ddc.png', False)
     ])
 
 @app.route('/games')
