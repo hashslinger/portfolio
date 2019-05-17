@@ -49,6 +49,12 @@ data:
         location / {
           proxy_pass http://portfolio.default.svc.cluster.local:3001;
         }
+        location = /challenge-framework {
+          return 302 /challenge-framework/;
+        } # a little cheat to strip the path
+        location /challenge-framework/ {
+          proxy_pass http://challenge.default.svc.cluster.local:3001/;
+        }
       }
 
   radioplaylist.live: |
@@ -57,6 +63,18 @@ data:
         listen 80;
         location / {
           proxy_pass http://radio.default.svc.cluster.local:3002;
+        }
+      }
+
+  codestory.xyz: |
+      server {
+        server_name codestory.xyz www.codestory.xyz;
+        listen 80;
+        location / {
+          proxy_pass http://codestory-web.default.svc.cluster.local;
+        }
+        location /api {
+          proxy_pass http://codestory-api.default.svc.cluster.local:3001;
         }
       }
 
