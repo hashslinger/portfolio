@@ -49,11 +49,8 @@ data:
         location / {
           proxy_pass http://portfolio.default.svc.cluster.local:3001;
         }
-        location = /challenge-framework {
-          return 302 /challenge-framework/;
-        } # a little cheat to strip the path
         location /challenge-framework/ {
-          proxy_pass http://challenge.default.svc.cluster.local:3001/;
+          proxy_pass http://challenge.default.svc.cluster.local:3001;
         }
       }
 
