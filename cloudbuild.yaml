@@ -15,21 +15,21 @@ steps:
   - 'CLOUDSDK_CONTAINER_CLUSTER=your-first-cluster-1'
 
 - name: 'gcr.io/cloud-builders/kubectl'
-  id: Deploy nginx
+  id: Deploy portfolio
   args:
   - 'apply'
   - '-f'
-  - 'k8s/nginx.yaml'
+  - 'k8s/portfolio.yaml'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-west2-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=your-first-cluster-1'
 
 - name: 'gcr.io/cloud-builders/kubectl'
-  id: Deploy
+  id: Deploy ingress
   args:
   - 'apply'
   - '-f'
-  - 'k8s/portfolio.yaml'
+  - 'k8s/ingress.yaml'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-west2-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=your-first-cluster-1'

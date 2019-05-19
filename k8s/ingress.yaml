@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+      kubernetes.io/ingress.class: nginx
+      certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+   - hosts:
+     - radioplaylist.live
+     - www.radioplaylist.live
+     - codestory.xyz
+     - www.codestory.xyz
+     - gregoryguterman.com
+     - www.gregoryguterman.com
+     secretName: letsencrypt-prod
+  rules:
+  - host: www.gregoryguterman.com
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: portfolio
+            servicePort: 3001
+        - path: /challenge-framework
+          backend:
+            serviceName: challenge
+            servicePort: 3001
+  - host: gregoryguterman.com
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: portfolio
+            servicePort: 3001
+        - path: /challenge-framework
+          backend:
+            serviceName: challenge
+            servicePort: 3001
+  - host: www.radioplaylist.live
+    http:
+      paths:
+      - backend:
+          serviceName: radio
+          servicePort: 3002
+  - host: radioplaylist.live
+    http:
+      paths:
+      - backend:
+          serviceName: radio
+          servicePort: 3002
+  - host: www.codestory.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: codestory-web
+          servicePort: 80
+      - path: /api
+        backend:
+          serviceName: codestory-api
+          servicePort: 3001
+  - host: codestory.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: codestory-web
+          servicePort: 80
+      - path: /api
+        backend:
+          serviceName: codestory-api
+          servicePort: 3001
