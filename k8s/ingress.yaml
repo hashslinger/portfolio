@@ -27,6 +27,14 @@ spec:
           backend:
             serviceName: challenge
             servicePort: 3001
+        - path: /deuces/web
+          backend:
+            serviceName: deuces-web
+            servicePort: 80
+        - path: /deuces/server
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
   - host: gregoryguterman.com
     http:
       paths:
@@ -38,6 +46,14 @@ spec:
           backend:
             serviceName: challenge
             servicePort: 3001
+        - path: /deuces/web
+          backend:
+            serviceName: deuces-web
+            servicePort: 80
+        - path: /deuces/server
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
   - host: www.radioplaylist.live
     http:
       paths:
