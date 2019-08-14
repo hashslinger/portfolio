@@ -27,14 +27,6 @@ spec:
           backend:
             serviceName: challenge
             servicePort: 3001
-        - path: /deuces/web
-          backend:
-            serviceName: deuces-web
-            servicePort: 80
-        - path: /deuces/server
-          backend:
-            serviceName: deuces-server
-            servicePort: 3012
   - host: gregoryguterman.com
     http:
       paths:
@@ -46,14 +38,6 @@ spec:
           backend:
             serviceName: challenge
             servicePort: 3001
-        - path: /deuces/web
-          backend:
-            serviceName: deuces-web
-            servicePort: 80
-        - path: /deuces/server
-          backend:
-            serviceName: deuces-server
-            servicePort: 3012
   - host: www.radioplaylist.live
     http:
       paths:
@@ -88,3 +72,51 @@ spec:
         backend:
           serviceName: codestory-api
           servicePort: 3001
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deuces-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  tls:
+   - hosts:
+     - gregoryguterman.com
+     - www.gregoryguterman.com
+     secretName: letsencrypt-prod
+  rules:
+  - host: www.gregoryguterman.com
+    http:
+      paths:
+        - path: /deuces(/)(socket.io/.*|socket.io$)
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
+        - path: /deuces/server(/)(.*|$)
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
+        - path: /deuces(/|$)(.*)
+          backend:
+            serviceName: deuces-web
+            servicePort: 80
+  - host: gregoryguterman.com
+    http:
+      paths:
+        - path: /deuces(/)(socket.io/.*|socket.io$)
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
+        - path: /deuces/server(/)(.*|$)
+          backend:
+            serviceName: deuces-server
+            servicePort: 3012
+        - path: /deuces(/|$)(.*)
+          backend:
+            serviceName: deuces-web
+            servicePort: 80

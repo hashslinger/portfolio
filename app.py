@@ -10,12 +10,13 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('home.html', projects= [
-        ('CodeStory', '/websites', '''static/images/codestory.png''', False),
+        ('CodeStory', '/websites', '''static/images/CodeStory.jpg''', False),
         ('Plankton Populations', '/visualizations', '''http://www.exploratorium.edu/sites/default/files/East_LivingLiquids.jpg''', False),
         ('3d Gif Maker', '/websites', '''static/videos/3dgifmaker.mp4''', True),
         ('Radio Playlists', '/websites', 'static/images/radioplaylists.png', False),
         ('TekBubble', '/games', 'static/images/tbvonwoz.png', False),
         ('Synteny Explorer', '/visualizations', 'static/images/genome.png', False),
+        ('Deuces', '/games', '''static/images/deuces.jpg''', False),
         ('JS Static Analyzer', '/websites', 'static/images/js-static-analyzer.png', False),
         ('Tower Defense', '/games', 'static/videos/tower-defense.mp4', True),
         ('ChessGo', '/games', 'static/images/chessgoSS.png', False),
