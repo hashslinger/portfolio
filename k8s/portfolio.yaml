@@ -5,9 +5,9 @@ metadata:
   labels:
     app: portfolio
   annotations:
-    co.elastic.logs/enabled: true
+    co.elastic.logs/enabled: 'true'
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: portfolio
