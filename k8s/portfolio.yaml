@@ -4,6 +4,8 @@ metadata:
   name: portfolio
   labels:
     app: portfolio
+  annotations:
+    co.elastic.logs/enabled: true
 spec:
   replicas: 2
   selector:
@@ -16,7 +18,7 @@ spec:
     spec:
       containers:
       - name: portfolio
-        image: gcr.io/portfolio-239904/github.com/hashcacher/portfolio:97bae09c4c8ac13f360a377078c53c6c2418d565
+        image: gcr.io/portfolio-239904/github_hashcacher_portfolio:cbfd499ba2dbc15b745ec6af941ca4e7b250071b
         ports:
         - containerPort: 3001
 
