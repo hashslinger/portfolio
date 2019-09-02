@@ -13,6 +13,9 @@ spec:
     resources:
       requests:
         storage: 1Gi
+  podTemplate:
+    annotations:
+      co.elastic.logs/disable: "true"
   terminationPolicy: DoNotTerminate
 ---
 apiVersion: v1
@@ -85,6 +88,8 @@ spec:
     metadata:
       labels:
         k8s-app: filebeat
+      annotations:
+        co.elastic.logs/disable: "true"
     spec:
       serviceAccountName: filebeat
       terminationGracePeriodSeconds: 30
@@ -205,6 +210,7 @@ spec:
         k8s-app: kibana
       annotations:
         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+        co.elastic.logs/disable: "true"
     spec:
       containers:
       - name: kibana
