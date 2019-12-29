@@ -4,7 +4,7 @@ metadata:
   name: ingress
   annotations:
       kubernetes.io/ingress.class: nginx
-      certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+      cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
    - hosts:
@@ -14,7 +14,9 @@ spec:
      - www.codestory.xyz
      - gregoryguterman.com
      - www.gregoryguterman.com
-     secretName: letsencrypt-prod
+     - chessgo.xyz
+     - www.chessgo.xyz
+     secretName: gregoryguterman-tls-cert
   rules:
   - host: www.gregoryguterman.com
     http:
@@ -72,6 +74,20 @@ spec:
         backend:
           serviceName: codestory-api
           servicePort: 3001
+  - host: www.chessgo.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: chessgo
+          servicePort: 8080
+  - host: chessgo.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: chessgo
+          servicePort: 8080
 
 ---
 
@@ -81,14 +97,14 @@ metadata:
   name: deuces-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   tls:
    - hosts:
      - gregoryguterman.com
      - www.gregoryguterman.com
-     secretName: letsencrypt-prod
+     secretName: gregoryguterman-tls-cert
   rules:
   - host: www.gregoryguterman.com
     http:

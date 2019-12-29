@@ -14,8 +14,9 @@ spec:
       requests:
         storage: 1Gi
   podTemplate:
-    annotations:
-      co.elastic.logs/disable: "true"
+    metadata:
+      annotations:
+        co.elastic.logs/disable: "true"
   terminationPolicy: DoNotTerminate
 ---
 apiVersion: v1
