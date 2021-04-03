@@ -244,6 +244,29 @@ spec:
         - containerPort: 5601
           name: ui
           protocol: TCP
+        volumeMounts:
+          - name: config
+            mountPath: /usr/share/kibana/config
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: kibana-config
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+data:
+  kibana.yml: |
+    ---
+    server.name: kibana
+    server.host: "0"
+    elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+    server.basePath: "/shakespeare"
+    server.rewriteBasePath: "true"
 
 ---
 
@@ -261,7 +284,7 @@ spec:
 
 ---
 
-apiVersion: batch/v2alpha1 #for API server versions >= 1.8.0 use batch/v1beta1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: curator
@@ -289,6 +312,7 @@ spec:
             configMap:
               name: curator-config
           restartPolicy: OnFailure
+
 ---
 
 apiVersion: v1
@@ -321,7 +345,7 @@ data:
           direction: older
           timestring: '%Y.%m.%d'
           unit: days
-          unit_count: 7
+          unit_count: 30
           field:
           stats_result:
           epoch:
