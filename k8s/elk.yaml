@@ -1,10 +1,10 @@
-apiVersion: kubedb.com/v1alpha1
+apiVersion: kubedb.com/v1alpha2
 kind: Elasticsearch
 metadata:
   name: elasticsearch
   namespace: default
 spec:
-  version: "6.5.3"
+  version: "xpack-7.9.1-v1"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: filebeat-config
-  namespace: default
+  namespace: kube-system
   labels:
     k8s-app: filebeat
 data:
@@ -44,6 +44,7 @@ data:
       providers:
         - type: kubernetes
           hints.enabled: true
+          hints.default_config.enabled: false
 
     processors:
       - add_cloud_metadata:
@@ -60,31 +61,20 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
+
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: filebeat-inputs
-  namespace: default
-  labels:
-    k8s-app: filebeat
-data:
-  kubernetes.yml: |-
-    - type: docker
-      containers.ids:
-      - "*"
-      processors:
-        - add_kubernetes_metadata:
-            in_cluster: true
----
-apiVersion: extensions/v1beta1
+
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: filebeat
-  namespace: default
+  namespace: kube-system
   labels:
     k8s-app: filebeat
 spec:
+  selector:
+    matchLabels:
+      k8s-app: filebeat
   template:
     metadata:
       labels:
@@ -96,24 +86,28 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: filebeat
-        image: docker.elastic.co/beats/filebeat:6.5.4
+        image: docker.elastic.co/beats/filebeat:7.9.1
         args: [
           "-c", "/etc/filebeat.yml",
           "-e",
         ]
         env:
         - name: ELASTICSEARCH_HOST
-          value: elasticsearch
+          value: elasticsearch.default.svc.cluster.local
         - name: ELASTICSEARCH_PORT
           value: "9200"
         - name: ELASTICSEARCH_USERNAME
-          value: admin
+          value: elastic
         - name: ELASTICSEARCH_PASSWORD
-          value: zcy5ji2y
+          value: z8(Oa(pMI$(!H3Ic
         - name: ELASTIC_CLOUD_ID
           value:
         - name: ELASTIC_CLOUD_AUTH
           value:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         securityContext:
           runAsUser: 0
           # If using Red Hat OpenShift uncomment this:
@@ -129,32 +123,34 @@ spec:
           mountPath: /etc/filebeat.yml
           readOnly: true
           subPath: filebeat.yml
-        - name: inputs
-          mountPath: /usr/share/filebeat/inputs.d
-          readOnly: true
         - name: data
           mountPath: /usr/share/filebeat/data
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
       volumes:
       - name: config
         configMap:
-          defaultMode: 0600
+          defaultMode: 0640
           name: filebeat-config
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
-      - name: inputs
-        configMap:
-          defaultMode: 0600
-          name: filebeat-inputs
+      - name: varlog
+        hostPath:
+          path: /var/log
       # data folder stores a registry of read status for all files, so we don't send everything again on a Filebeat pod restart
       - name: data
         hostPath:
+          # When filebeat runs as non-root user, this directory needs to be writable by group (g+w).
           path: /var/lib/filebeat-data
           type: DirectoryOrCreate
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -162,13 +158,15 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: filebeat
-  namespace: default
+  namespace: kube-system
 roleRef:
   kind: ClusterRole
   name: filebeat
   apiGroup: rbac.authorization.k8s.io
+
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: filebeat
@@ -183,15 +181,21 @@ rules:
   - get
   - watch
   - list
+- apiGroups: ["apps"]
+  resources:
+    - replicasets
+  verbs: ["get", "list", "watch"]
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: filebeat
-  namespace: default
+  namespace: kube-system
   labels:
     k8s-app: filebeat
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -215,7 +219,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana-oss:6.5.3
+        image: docker.elastic.co/kibana/kibana-oss:7.9.1
         resources:
           # need more cpu upon initialization, therefore burstable class
           limits:
@@ -229,9 +233,9 @@ spec:
           - name: ELASTICSEARCH_URL
             value: http://elasticsearch.default.svc.cluster.local:9200
           - name: ELASTICSEARCH_USERNAME
-            value: admin
+            value: elastic
           - name: ELASTICSEARCH_PASSWORD
-            value: zcy5ji2y
+            value: z8(Oa(pMI$(!H3Ic
           - name: SERVER_NAME
             value: kibana
           - name: SERVER_REWRITEBASEPATH
@@ -240,3 +244,107 @@ spec:
         - containerPort: 5601
           name: ui
           protocol: TCP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana
+spec:
+  selector:
+    k8s-app: kibana
+  ports:
+  - protocol: TCP
+    port: 5601
+    targetPort: 5601
+
+---
+
+apiVersion: batch/v2alpha1 #for API server versions >= 1.8.0 use batch/v1beta1
+kind: CronJob
+metadata:
+  name: curator
+  labels:
+    app: curator
+spec:
+  schedule: "0 1 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: bobrik/curator:5.1.1
+            name: curator
+            args: ["--config", "/etc/config/config.yml", "/etc/config/action_file.yml"]
+            volumeMounts:
+            - name: config
+              mountPath: /etc/config
+          volumes:
+          - name: config
+            configMap:
+              name: curator-config
+          restartPolicy: OnFailure
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: curator-config
+  labels:
+    app: curator
+data:
+  action_file.yml: |-
+    ---
+    # Remember, leave a key empty if there is no value.  None will be a string,
+    # not a Python "NoneType"
+    #
+    # Also remember that all examples have 'disable_action' set to True.  If you
+    # want to use this action as a template, be sure to set this to False after
+    # copying it.
+    actions:
+      1:
+        action: delete_indices
+        description: "Clean up ES by deleting old indices"
+        options:
+          timeout_override:
+          continue_if_exception: False
+          disable_action: False
+          ignore_empty_list: True
+        filters:
+        - filtertype: age
+          source: name
+          direction: older
+          timestring: '%Y.%m.%d'
+          unit: days
+          unit_count: 7
+          field:
+          stats_result:
+          epoch:
+          exclude: False
+  config.yml: |-
+    ---
+    # Remember, leave a key empty if there is no value.  None will be a string,
+    # not a Python "NoneType"
+    client:
+      hosts:
+        - elasticsearch.default.svc.cluster.local
+      port: 9200
+      url_prefix:
+      use_ssl: False
+      certificate:
+      client_cert:
+      client_key:
+      ssl_no_validate: False
+      http_auth:
+      timeout: 30
+      master_only: False
+    logging:
+      loglevel: INFO
+      logfile:
+      logformat: default
+      blacklist: ['elasticsearch', 'urllib3']

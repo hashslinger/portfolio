@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress-grafana-minion
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.org/mergeable-ingress-type: minion
+spec:
+  tls:
+   - hosts:
+     - plantchess.com
+     - www.plantchess.com
+     secretName: plantchess-tls-cert
+  rules:
+  - host: plantchess.com
+    http:
+      paths:
+      - path: /lines-n-bars
+        backend:
+          serviceName: grafana
+          servicePort: 80
+  - host: www.plantchess.com
+    http:
+      paths:
+      - path: /lines-n-bars
+        backend:
+          serviceName: grafana
+          servicePort: 80
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress-kibana-minion
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.org/mergeable-ingress-type: minion
+spec:
+  tls:
+   - hosts:
+     - plantchess.com
+     - www.plantchess.com
+     secretName: plantchess-tls-cert
+  rules:
+  - host: plantchess.com
+    http:
+      paths:
+      - path: /shakespeare
+        backend:
+          serviceName: kibana
+          servicePort: 80
+  - host: www.plantchess.com
+    http:
+      paths:
+      - path: /shakespeare
+        backend:
+          serviceName: kibana
+          servicePort: 80
